@@ -7,13 +7,19 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">CAJA</a> |
-    <a asp-action="Create" asp-route-ShiftNumber ="CA">Citas</a>
-
+    <a asp-action="Create" asp-route-Type="1">CAJA</a> |
+    <a asp-action="Create" asp-route-Type="2">CITAS</a> |
+    <a asp-action="Create" asp-route-Type="3">ENTREGA DE RESULTADOS</a> |
+    <a asp-action="Edit" asp-route-Type="1">SIGUIENTE CAJA</a> |
+    <a asp-action="Edit" asp-route-Type="2">SIGUIENTE CITAS</a> |
+    <a asp-action="Edit" asp-route-Type="3">SIGUIENTE ENTREGA RESULTADOS</a> |
 </p>
 <table class="table">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.ServicesType)
             </th>
@@ -21,10 +27,13 @@
                 @Html.DisplayNameFor(model => model.ShiftNumber)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Date)
+                @Html.DisplayNameFor(model => model.ExpeditionDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Time)
+                @Html.DisplayNameFor(model => model.AttentionDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Stand)
             </th>
             <th></th>
         </tr>
@@ -33,16 +42,22 @@
 @foreach (var item in Model) {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.ServicesType)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ShiftNumber)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Date)
+                @Html.DisplayFor(modelItem => item.ExpeditionDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Time)
+                @Html.DisplayFor(modelItem => item.AttentionDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Stand)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

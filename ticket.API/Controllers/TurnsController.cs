@@ -33,8 +33,7 @@ namespace ticket.API.Controllers
                 return NotFound();
             }
 
-            var turn = await _context.Turns
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var turn = await _context.Turns.FirstOrDefaultAsync(m => m.Id == id);
             if (turn == null)
             {
                 return NotFound();
@@ -43,42 +42,138 @@ namespace ticket.API.Controllers
             return View(turn);
         }
 
-        // GET: Turns/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create(int? Type)
         {
-            return View();
-        }
+            if (Type == 1)
+            {               
+                var ST = "CA";
+                var turn = await _context.Turns.OrderByDescending(x => x.Id).FirstOrDefaultAsync(m => m.ServicesType == ST);
+                if (turn == null)
+                {
+                    var SN = 1;
+                    var datenow = DateTime.Now;                   
+                    _context.Turns.Add(new Turn { ServicesType = "CA", ShiftNumber = SN, ExpeditionDate = datenow });
+                }
+                else
+                {
+                    var SN = turn.ShiftNumber + 1;
+                    var datenow = DateTime.Now;
+                    _context.Turns.Add(new Turn { ServicesType = "CA", ShiftNumber = SN, ExpeditionDate = datenow });
+                }
+                
+                
 
-        // POST: Turns/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ServicesType,ShiftNumber,Date,Time")] Turn turn)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(turn);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
             }
-            return View(turn);
+
+            if (Type == 2)
+            {
+                var ST = "CI";
+                var turn = await _context.Turns.OrderByDescending(x => x.Id).FirstOrDefaultAsync(m => m.ServicesType == ST);
+                if (turn == null)
+                {
+                    var SN = 1;
+                    var datenow = DateTime.Now;                    
+                    _context.Turns.Add(new Turn { ServicesType = "CI", ShiftNumber = SN, ExpeditionDate = datenow });
+                }
+                else
+                {
+                    var SN = turn.ShiftNumber + 1;
+                    var datenow = DateTime.Now;
+                    _context.Turns.Add(new Turn { ServicesType = "CI", ShiftNumber = SN, ExpeditionDate = datenow });
+                }
+              
+
+                await _context.SaveChangesAsync();
+            }
+
+            if (Type == 3)
+            {
+                var ST = "ER";
+                var turn = await _context.Turns.OrderByDescending(x => x.Id).FirstOrDefaultAsync(m => m.ServicesType == ST);
+                if (turn == null)
+                {
+                    var SN = 1;
+                    var datenow = DateTime.Now;
+                    _context.Turns.Add(new Turn { ServicesType = "ER", ShiftNumber = SN, ExpeditionDate = datenow });
+                }
+                else
+                {
+                    var SN = turn.ShiftNumber + 1;
+                    var datenow = DateTime.Now;
+                    _context.Turns.Add(new Turn { ServicesType = "ER", ShiftNumber = SN, ExpeditionDate = datenow });
+                }
+
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index));
         }
-
+       
         // GET: Turns/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? Type)
         {
-            if (id == null)
+            if (Type == 1)
             {
-                return NotFound();
+                string ST = "CA";
+                Turn turn = await _context.Turns.FirstOrDefaultAsync(m => m.ServicesType == ST && m.Stand == null);
+                if (turn == null)
+                {
+                    return NotFound();
+                }
+
+                else
+                {
+                    turn.Stand = "C-1";
+                    turn.AttentionDate = DateTime.Now;
+
+                    _context.Turns.Update(turn);
+
+                   await _context.SaveChangesAsync();
+                }
             }
 
-            var turn = await _context.Turns.FindAsync(id);
-            if (turn == null)
+            if (Type == 2)
             {
-                return NotFound();
+                string ST = "CI";
+                Turn turn = await _context.Turns.FirstOrDefaultAsync(m => m.ServicesType == ST && m.Stand == null);
+                if (turn == null)
+                {
+                    return NotFound();
+                }
+
+                else
+                {
+                    turn.Stand = "V-1";
+                    turn.AttentionDate = DateTime.Now;
+
+                    _context.Turns.Update(turn);
+
+                    await _context.SaveChangesAsync();
+                }
             }
-            return View(turn);
+
+            if (Type == 3)
+            {
+                string ST = "ER";
+                Turn turn = await _context.Turns.FirstOrDefaultAsync(m => m.ServicesType == ST && m.Stand == null);
+                if (turn == null)
+                {
+                    return NotFound();
+                }
+
+                else
+                {
+                    turn.Stand = "E-1";
+                    turn.AttentionDate = DateTime.Now;
+
+                    _context.Turns.Update(turn);
+
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: Turns/Edit/5
@@ -86,7 +181,8 @@ namespace ticket.API.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ServicesType,ShiftNumber,Date,Time")] Turn turn)
+        /*
+        public async Task<IActionResult> Edit(int id, Turn turn)
         {
             if (id != turn.Id)
             {
@@ -115,7 +211,7 @@ namespace ticket.API.Controllers
             }
             return View(turn);
         }
-
+        */
         // GET: Turns/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
